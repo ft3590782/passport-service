@@ -14,3 +14,7 @@ yarn-error.log*
 *.sln
 /package-lock.json
 /yarn.lock
+/temp/uploads
+/server/build
+/npm
+/gulpfile.js
