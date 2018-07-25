@@ -18,3 +18,4 @@ yarn-error.log*
 /server/build
 /npm
 /gulpfile.js
+/temp/pdf

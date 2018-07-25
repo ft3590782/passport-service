@@ -3,19 +3,17 @@ import fs from 'fs'
 import express from 'express'
 import upload from '../util/multer'
 import _ from 'lodash'
-import config from '../config'
 
-
-
-const _createPDF = (res, filename = "output") => {
+const _createPDF = (res, filename) => {
 
   return new Promise((resolve, reject) => {
     console.log('####################################createPDF#################################')
-    // console.log(createPDF)
+    console.log(filename)
 
     let doc = new PDFDocument();
     // create a document the same way as above
     let filePath = `temp/pdf/${filename}-${Date.now()}.pdf`
+    console.log(filePath)
     // add your content to the document here, as usual
     let stream = doc.pipe(fs.createWriteStream(filePath));
     const width = '612'
@@ -59,7 +57,25 @@ const resultObj = {
 let router = express.Router();
 
 router.post('/create/pdf', (req, res) => {
-  console.log(req.files)
+  console.log('/create/pdf')
+  const filename = req.body.filename || ''
+  if (req.body.files.length) {
+    _createPDF(req.body.files, filename).then(filepath => {
+      // res.end(data,'binary')
+      fs.readFile(filepath, (err, buffer) => {
+        res.header('Content-Type', 'application/octet-stream')
+        res.attachment(filepath)
+        res.end(buffer)
+        // res.append('PDFName', filename)
+        // res.end(buffer, 'binary')
+      })
+    })
+  } else {
+    let obj = _.clone(resultObj)
+    obj.code = 1;
+    obj.message = '下载失败!'
+    res.json(req.body);
+  }
 })
 
 router.post('/pdf', function (req, res) {
@@ -70,7 +86,7 @@ router.post('/pdf', function (req, res) {
     // console.log(err)
     if (err) {
       obj.code = 1;
-      obj.message = err
+      obj.data = err
       obj.message = '上传失败!'
       res.json(obj);
     } else {

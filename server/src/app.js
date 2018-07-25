@@ -1,10 +1,16 @@
 import express from 'express'
 import indexRouter from './routes/index'
 import createPDF from './routes/createPDF'
+import bodyParser from 'body-parser';
 // var bodyParser = require('body-parser');
 
 let app = express();
 
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({
+  extended: true
+})); // for parsing application/x-www-form-urlencoded
 // app.use(bodyParser.json());
 //解决跨域
 app.all('*', function (req, res, next) {

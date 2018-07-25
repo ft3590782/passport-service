@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
+import tongji from './directive/tongji'
+import './assets/icons/iconfont.css'
 Vue.config.productionTip = false
 
 Vue.filter('formatSize', function (size) {
@@ -17,6 +18,7 @@ Vue.filter('formatSize', function (size) {
   return size.toString() + ' B'
 })
 
+Vue.use(tongji)
 
 
 /* eslint-disable no-new */
